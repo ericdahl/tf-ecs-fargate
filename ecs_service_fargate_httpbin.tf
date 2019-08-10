@@ -12,6 +12,8 @@ resource "aws_ecs_task_definition" "httpbin_fargate" {
     "FARGATE",
   ]
 
+  execution_role_arn = "${module.ecs.aws_iam_role_ecs_task_execution_arn}"
+
   network_mode = "awsvpc"
   cpu          = 256
   memory       = 512
@@ -38,15 +40,21 @@ resource "aws_ecs_service" "httpbin_fargate" {
     ]
   }
 
-//  depends_on = ["aws_alb.httpbin_fargate"]
+  depends_on = ["aws_alb.httpbin_fargate"]
 
-//  load_balancer {
-//    target_group_arn = "${aws_alb_target_group.httpbin_fargate.arn}"
-//    container_name   = "httpbin"
-//    container_port   = 8080
-//  }
+  load_balancer {
+    target_group_arn = "${aws_alb_target_group.httpbin_fargate.arn}"
+    container_name   = "httpbin"
+    container_port   = 8080
+  }
 }
-//
+
+resource "aws_cloudwatch_log_group" "httpbin_fargate" {
+  name = "/ecs/httpbin-fargate"
+
+  retention_in_days = 7
+}
+
 resource "aws_alb" "httpbin_fargate" {
   count = "${var.enable_fargate_httpbin == "true" ? 1 : 0}"
 
