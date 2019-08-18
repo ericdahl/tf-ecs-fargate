@@ -1,5 +1,10 @@
 data "template_file" "httpbin_fargate" {
   template = "${file("templates/tasks/httpbin-fargate.json")}"
+
+
+  vars {
+    splunk_url = "http://${aws_alb.splunk.dns_name}:8088"
+  }
 }
 
 resource "aws_ecs_task_definition" "httpbin_fargate" {
@@ -50,6 +55,8 @@ resource "aws_ecs_service" "httpbin_fargate" {
 }
 
 resource "aws_cloudwatch_log_group" "httpbin_fargate" {
+  count = "${var.enable_fargate_httpbin == "true" ? 1 : 0}"
+
   name = "/ecs/httpbin-fargate"
 
   retention_in_days = 7

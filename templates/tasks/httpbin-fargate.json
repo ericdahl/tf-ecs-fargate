@@ -5,17 +5,15 @@
     "portMappings": [
       {
         "containerPort": 8080,
-        "hostPort": 8080,
         "protocol": "tcp"
       }
     ],
     "essential": true,
     "logConfiguration": {
-      "logDriver": "awslogs",
+      "logDriver": "splunk",
       "options": {
-        "awslogs-group": "/ecs/httpbin-fargate",
-        "awslogs-region": "us-east-1",
-        "awslogs-stream-prefix": "ecs"
+        "splunk-url": "${splunk_url}",
+        "splunk-token": "bf726462-fedd-42ad-a28e-2762e8ad9e6a"
       }
     }
   }
