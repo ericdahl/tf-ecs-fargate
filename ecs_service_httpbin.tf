@@ -25,8 +25,12 @@ resource "aws_ecs_service" "httpbin" {
   name            = "httpbin"
   cluster         = module.ecs.cluster_name
   task_definition = aws_ecs_task_definition.httpbin[count.index].arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  desired_count   = 10
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 100
+  }
 
   network_configuration {
     security_groups = [
@@ -96,7 +100,7 @@ resource "aws_lb_target_group" "httpbin" {
   vpc_id               = module.vpc.vpc_id
   port                 = 8080
   protocol             = "HTTP"
-  deregistration_delay = 5
+  deregistration_delay = 0
   target_type          = "ip"
 
   health_check {
