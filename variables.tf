@@ -9,6 +9,6 @@ variable "public_key" {
 }
 
 
-variable "enable_fargate_httpbin" {
+variable "enable_httpbin" {
   default = false
 }
