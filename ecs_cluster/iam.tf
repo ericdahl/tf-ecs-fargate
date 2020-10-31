@@ -1,5 +1,5 @@
 //resource "aws_iam_role" "ecs_service" {
-//  name        = "${var.cluster_name}-service-role"
+//  name        = var.cluster_name}-service-role"
 //  description = "Role applied to ECS Services, allowing them to register in ELB/ALB, etc"
 //
 //  assume_role_policy = <<EOF
@@ -20,8 +20,8 @@
 //}
 //
 //resource "aws_iam_policy_attachment" "ecs_service" {
-//  name       = "${var.cluster_name}-ecs-service"
-//  roles      = ["${aws_iam_role.ecs_service.name}"]
+//  name       = var.cluster_name}-ecs-service"
+//  roles      = [aws_iam_role.ecs_service.name]
 //  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 //}
 
@@ -69,6 +69,6 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
-  role = "${aws_iam_role.ecs_task_execution.name}"
-  policy_arn = "${aws_iam_policy.ecs_task_execution.arn}"
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ecs_task_execution.arn
 }

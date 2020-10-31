@@ -8,13 +8,6 @@
         "protocol": "tcp"
       }
     ],
-    "essential": true,
-    "logConfiguration": {
-      "logDriver": "splunk",
-      "options": {
-        "splunk-url": "${splunk_url}",
-        "splunk-token": "bf726462-fedd-42ad-a28e-2762e8ad9e6a"
-      }
-    }
+    "essential": true
   }
 ]
