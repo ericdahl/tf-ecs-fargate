@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_ecs_task_definition" "httpbin" {
   container_definitions = jsonencode([
     {
@@ -10,6 +12,14 @@ resource "aws_ecs_task_definition" "httpbin" {
         }
       ]
       essential = true
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.httpbin.name
+          awslogs-region        = data.aws_region.current.region
+          awslogs-stream-prefix = "httpbin"
+        }
+      }
     }
   ])
   family = "httpbin"
