@@ -38,9 +38,7 @@ resource "aws_ecs_service" "httpbin" {
 
   network_configuration {
     security_groups = [
-      module.vpc.sg_allow_8080,
-      module.vpc.sg_allow_egress,
-      module.vpc.sg_allow_vpc,
+      aws_security_group.httpbin_task.id,
     ]
 
     subnets = [
@@ -76,8 +74,7 @@ resource "aws_lb" "httpbin" {
   ]
 
   security_groups = [
-    module.vpc.sg_allow_egress,
-    module.vpc.sg_allow_80,
+    aws_security_group.httpbin_lb.id,
   ]
 }
 
