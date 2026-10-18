@@ -29,6 +29,7 @@ resource "aws_ecs_task_definition" "httpbin" {
   ]
 
   execution_role_arn = aws_iam_role.ecs_task_execution.arn
+  task_role_arn      = aws_iam_role.ecs_task_httpbin.arn
 
   network_mode = "awsvpc"
   cpu          = 256
@@ -40,6 +41,8 @@ resource "aws_ecs_service" "httpbin" {
   cluster         = aws_ecs_cluster.default.name
   task_definition = aws_ecs_task_definition.httpbin.arn
   desired_count   = 2
+
+  enable_execute_command = true
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
