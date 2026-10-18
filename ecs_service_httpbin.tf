@@ -60,7 +60,7 @@ resource "aws_ecs_service" "httpbin" {
 
   depends_on = [
     aws_cloudwatch_log_group.httpbin,
-    aws_lb.httpbin
+    aws_lb_listener.httpbin,
   ]
 
   load_balancer {
