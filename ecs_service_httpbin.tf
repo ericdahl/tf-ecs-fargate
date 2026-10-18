@@ -4,7 +4,7 @@ resource "aws_ecs_task_definition" "httpbin" {
   container_definitions = jsonencode([
     {
       name  = "httpbin"
-      image = "ericdahl/httpbin:e249975"
+      image = "ghcr.io/mccutchen/go-httpbin:v2.16.1"
       portMappings = [
         {
           containerPort = 8080
