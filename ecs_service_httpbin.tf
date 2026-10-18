@@ -1,6 +1,18 @@
 resource "aws_ecs_task_definition" "httpbin" {
-  container_definitions = file("templates/tasks/httpbin.json")
-  family                = "httpbin"
+  container_definitions = jsonencode([
+    {
+      name  = "httpbin"
+      image = "ericdahl/httpbin:e249975"
+      portMappings = [
+        {
+          containerPort = 8080
+          protocol      = "tcp"
+        }
+      ]
+      essential = true
+    }
+  ])
+  family = "httpbin"
 
   requires_compatibilities = [
     "FARGATE",
