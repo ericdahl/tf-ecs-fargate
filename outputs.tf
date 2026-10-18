@@ -1,5 +1,5 @@
-output "aws_instance_jumphost_public_ip" {
-  value = aws_instance.jumphost.public_ip
+output "jumphost_instance_id" {
+  value = aws_instance.jumphost.id
 }
 
 output "httpbin_url" {
