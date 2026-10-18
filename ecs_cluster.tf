@@ -1,6 +1,18 @@
 resource "aws_ecs_cluster" "default" {
   name = var.name
 
+  configuration {
+    execute_command_configuration {
+      logging = "OVERRIDE"
+
+      log_configuration {
+        s3_bucket_name               = aws_s3_bucket.session_logs.bucket
+        s3_key_prefix                = "ecs-exec"
+        s3_bucket_encryption_enabled = true
+      }
+    }
+  }
+
   tags = {
     ClusterName = var.name
   }

@@ -26,6 +26,17 @@ data "aws_iam_policy_document" "ecs_task_httpbin" {
     ]
     resources = ["*"]
   }
+
+  # ECS Exec session transcripts
+  statement {
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.session_logs.arn}/ecs-exec/*"]
+  }
+
+  statement {
+    actions   = ["s3:GetEncryptionConfiguration"]
+    resources = [aws_s3_bucket.session_logs.arn]
+  }
 }
 
 resource "aws_iam_policy" "ecs_task_httpbin" {
