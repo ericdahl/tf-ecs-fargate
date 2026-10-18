@@ -12,6 +12,27 @@ resource "aws_ecs_task_definition" "httpbin" {
         }
       ]
       essential = true
+      linuxParameters = {
+        initProcessEnabled = true
+      }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.httpbin.name
+          awslogs-region        = data.aws_region.current.region
+          awslogs-stream-prefix = "httpbin"
+        }
+      }
+    },
+    # go-httpbin is distroless (no shell), so ECS Exec into this instead; shares the task's network and PID namespaces
+    {
+      name      = "debug"
+      image     = "public.ecr.aws/docker/library/busybox:1.37.0"
+      command   = ["sh", "-c", "while true; do sleep 3600; done"]
+      essential = false
+      linuxParameters = {
+        initProcessEnabled = true
+      }
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -32,6 +53,7 @@ resource "aws_ecs_task_definition" "httpbin" {
   task_role_arn      = aws_iam_role.ecs_task_httpbin.arn
 
   network_mode = "awsvpc"
+  pid_mode     = "task"
   cpu          = 256
   memory       = 512
 }
