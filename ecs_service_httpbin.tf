@@ -53,6 +53,8 @@ resource "aws_ecs_service" "httpbin" {
 
     subnets = [
       module.vpc.subnet_private1,
+      module.vpc.subnet_private2,
+      module.vpc.subnet_private3,
     ]
   }
 
