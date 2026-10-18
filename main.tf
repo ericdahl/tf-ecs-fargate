@@ -7,12 +7,6 @@ module "vpc" {
   source = "github.com/ericdahl/tf-vpc"
 }
 
-module "ecs" {
-  source = "./ecs_cluster"
-
-  cluster_name = var.name
-}
-
 data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }

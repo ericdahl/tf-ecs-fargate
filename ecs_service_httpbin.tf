@@ -6,7 +6,7 @@ resource "aws_ecs_task_definition" "httpbin" {
     "FARGATE",
   ]
 
-  execution_role_arn = module.ecs.aws_iam_role_ecs_task_execution_arn
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
 
   network_mode = "awsvpc"
   cpu          = 256
@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "httpbin" {
 
 resource "aws_ecs_service" "httpbin" {
   name            = "httpbin"
-  cluster         = module.ecs.cluster_name
+  cluster         = aws_ecs_cluster.default.name
   task_definition = aws_ecs_task_definition.httpbin.arn
   desired_count   = 10
 
