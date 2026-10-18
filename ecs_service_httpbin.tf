@@ -1,11 +1,7 @@
-data "template_file" "httpbin" {
-  template = file("templates/tasks/httpbin.json")
-}
-
 resource "aws_ecs_task_definition" "httpbin" {
   count = var.enable_httpbin ? 1 : 0
 
-  container_definitions = data.template_file.httpbin.rendered
+  container_definitions = file("templates/tasks/httpbin.json")
   family                = "httpbin"
 
   requires_compatibilities = [
