@@ -1,6 +1,4 @@
 resource "aws_ecs_task_definition" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   container_definitions = file("templates/tasks/httpbin.json")
   family                = "httpbin"
 
@@ -16,11 +14,9 @@ resource "aws_ecs_task_definition" "httpbin" {
 }
 
 resource "aws_ecs_service" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   name            = "httpbin"
   cluster         = module.ecs.cluster_name
-  task_definition = aws_ecs_task_definition.httpbin[count.index].arn
+  task_definition = aws_ecs_task_definition.httpbin.arn
   desired_count   = 10
 
   capacity_provider_strategy {
@@ -46,23 +42,19 @@ resource "aws_ecs_service" "httpbin" {
   ]
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.httpbin[count.index].arn
+    target_group_arn = aws_lb_target_group.httpbin.arn
     container_name   = "httpbin"
     container_port   = 8080
   }
 }
 
 resource "aws_cloudwatch_log_group" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   name = "/ecs/httpbin"
 
   retention_in_days = 7
 }
 
 resource "aws_lb" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   name = "httpbin"
 
   subnets = [
@@ -78,20 +70,16 @@ resource "aws_lb" "httpbin" {
 }
 
 resource "aws_lb_listener" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   default_action {
-    target_group_arn = aws_lb_target_group.httpbin[count.index].arn
+    target_group_arn = aws_lb_target_group.httpbin.arn
     type             = "forward"
   }
 
-  load_balancer_arn = aws_lb.httpbin[count.index].arn
+  load_balancer_arn = aws_lb.httpbin.arn
   port              = 80
 }
 
 resource "aws_lb_target_group" "httpbin" {
-  count = var.enable_httpbin ? 1 : 0
-
   name                 = "httpbin"
   vpc_id               = module.vpc.vpc_id
   port                 = 8080
@@ -108,7 +96,7 @@ resource "aws_lb_target_group" "httpbin" {
 }
 
 resource "aws_route53_record" "httpbin" {
-  count = var.enable_httpbin && var.route53_zone_id != "" ? 1 : 0
+  count = var.route53_zone_id != "" ? 1 : 0
 
   name    = "httpbin"
   type    = "A"
@@ -116,7 +104,7 @@ resource "aws_route53_record" "httpbin" {
 
   alias {
     evaluate_target_health = false
-    name                   = aws_lb.httpbin[count.index].dns_name
-    zone_id                = aws_lb.httpbin[count.index].zone_id
+    name                   = aws_lb.httpbin.dns_name
+    zone_id                = aws_lb.httpbin.zone_id
   }
 }

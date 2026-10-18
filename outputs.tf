@@ -3,7 +3,7 @@ output "jumphost_instance_id" {
 }
 
 output "httpbin_url" {
-  value = join("", aws_lb.httpbin.*.dns_name)
+  value = aws_lb.httpbin.dns_name
 }
 
 output "httbin_url_short" {
