@@ -34,7 +34,8 @@ resource "aws_ecs_task_definition" "httpbin" {
         initProcessEnabled = true
         # lets root here inspect the nonroot go-httpbin process (/proc/<pid>/root, environ)
         capabilities = {
-          add = ["SYS_PTRACE"]
+          add  = ["SYS_PTRACE"]
+          drop = []
         }
       }
       logConfiguration = {
