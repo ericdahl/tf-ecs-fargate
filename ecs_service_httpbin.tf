@@ -39,7 +39,7 @@ resource "aws_ecs_service" "httpbin" {
   name            = "httpbin"
   cluster         = aws_ecs_cluster.default.name
   task_definition = aws_ecs_task_definition.httpbin.arn
-  desired_count   = 10
+  desired_count   = 2
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
