@@ -115,17 +115,3 @@ resource "aws_lb_target_group" "httpbin" {
     timeout             = 2
   }
 }
-
-resource "aws_route53_record" "httpbin" {
-  count = var.route53_zone_id != "" ? 1 : 0
-
-  name    = "httpbin"
-  type    = "A"
-  zone_id = var.route53_zone_id
-
-  alias {
-    evaluate_target_health = false
-    name                   = aws_lb.httpbin.dns_name
-    zone_id                = aws_lb.httpbin.zone_id
-  }
-}

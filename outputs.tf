@@ -5,7 +5,3 @@ output "jumphost_instance_id" {
 output "httpbin_url" {
   value = aws_lb.httpbin.dns_name
 }
-
-output "httbin_url_short" {
-  value = join("", aws_route53_record.httpbin.*.fqdn)
-}
