@@ -8,7 +8,7 @@ resource "aws_instance" "jumphost" {
 
   instance_type          = "t3.micro"
   subnet_id              = module.vpc.subnet_public1
-  vpc_security_group_ids = [module.vpc.sg_allow_egress]
+  vpc_security_group_ids = [aws_security_group.jumphost.id]
   iam_instance_profile   = aws_iam_instance_profile.jumphost.name
 
 
